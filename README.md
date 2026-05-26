@@ -38,8 +38,8 @@ Use this guide to determine where to place new code and files within the project
 
 - **src/services**/: Contains API handlers, database queries (e.g., Supabase interactions), and external integrations.
 
-- **src/stores/** */: Contains Pinia state management files for managing global application state.
+- **src/stores/**: Contains Pinia state management files for managing global application state.
 
-- **src/views/** */: Contains top-level, full-page Vue components that map directly to specific routes.
+- **src/views/**: Contains top-level, full-page Vue components that map directly to specific routes.
 
-- **public/** */: Contains static files served directly to the browser without Vite processing (e.g., favicon.ico).
+- **public/**: Contains static files served directly to the browser without Vite processing (e.g., favicon.ico).
