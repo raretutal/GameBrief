@@ -1,28 +1,25 @@
-# GameBrief
-CMSC-127-Final-Project
+markdown_content = """# 🎮 GameBrief
 
-## Recommended IDE Setup
+![Vue.js](https://img.shields.io/badge/vue-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+A web application built with Vue 3 and Vite.
 
-## Customize configuration
+## 🚀 Getting Started
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Prerequisites
 
-## Project Setup
+Ensure you have [Node.js](https://nodejs.org/) installed on your system.
 
-```sh
+### Installation
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Running App
 
-```sh
+```bash
 npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
 ```
