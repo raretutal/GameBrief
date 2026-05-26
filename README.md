@@ -1,4 +1,4 @@
-markdown_content = """# 🎮 GameBrief
+🎮 GameBrief
 
 ![Vue.js](https://img.shields.io/badge/vue-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
