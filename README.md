@@ -30,7 +30,7 @@ npm run dev
 # 📁 Project Structure
 Use this guide to determine where to place new code and files within the project:
 
-- **src/assets/** */: Contains static styling assets like global CSS and image files.
+- **src/assets/**: Contains static styling assets like global CSS and image files.
 
 - **src/components/**: Contains reusable Vue components (e.g., buttons, form inputs, icons) used across multiple pages.
 
