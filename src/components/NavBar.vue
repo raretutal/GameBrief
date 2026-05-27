@@ -5,7 +5,7 @@
         
         <div class="flex-shrink-0">
           <router-link to="/" class="font-black text-2xl tracking-tighter text-indigo-500 hover:text-indigo-400 transition-colors">
-            GameBrief
+            <img src="../assets/logos/GameBriefLogo.png" alt="GameBrief" class="w-50 h-14"/>
           </router-link>
         </div>
 
