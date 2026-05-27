@@ -28,7 +28,7 @@
         <div class="w-full md:w-3/4 lg:w-4/5 pt-4 md:pt-32">
           
           <div class="flex items-baseline gap-3 mb-1">
-            <h1 class="text-4xl md:text-5xl font-black tracking-tight">{{ gameData.title }}</h1>
+            <h1 class="text-4xl md:text-5xl font-black tracking-tight font-silkscreen">{{ gameData.title }}</h1>
             <span class="text-xl text-zinc-400 font-medium">{{ gameData.releaseYear }}</span>
           </div>
           <h2 class="text-base text-[#35CCE0] font-semibold mb-6">Developed by {{ gameData.developer }}</h2>
