@@ -1,46 +1,21 @@
 <script setup>
 defineProps({
-  image: {
-    type: String,
-    required: true
-  },
-
-  game_name: {
-    type: String,
-    required: true
-  },
-
-  game_platform: {
-    type: String,
-    required: true
-  },
-
-  average_rating: {
-    type: Number,
-    required: true
-  },
-
-  review_count: {
-    type: Number,
-    required: true
-  }
+  image: String,
+  game_name: String,
+  game_platform: String,
+  average_rating: Number,
+  review_count: Number
 })
 </script>
 
 <template>
 
-  <div class="trending-card">
+  <div class="trending-card" :style="{ backgroundImage: `url(${image})` }">
 
-    <div class="card-image">
-      <img
-        :src="image"
-        :alt="game_name"
-      />
-    </div>
-
-    <div class="card-info">
+    <div class="overlay">
 
       <div class="top-info">
+
         <h2 class="game-name">
           {{ game_name }}
         </h2>
@@ -48,6 +23,7 @@ defineProps({
         <p class="platform">
           {{ game_platform }}
         </p>
+
       </div>
 
       <div class="bottom-row">
@@ -74,72 +50,60 @@ defineProps({
 
 </template>
 
-
 <style scoped>
 
 .trending-card{
-  width: 650px;
+  width: 250px;
+  height: 300px;
 
-  border-radius: 24px;
+  border-radius: 10px;
 
   overflow: hidden;
 
-  background: #1f2937;
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  align-items: flex-end;
+
+  position: relative;
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
 }
 
-/* IMAGE */
+.overlay{
+  position: relative;
 
-.card-image{
   width: 100%;
-  height: 320px;
 
-  background: #d9d9d9;
-}
-
-.card-image img{
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-
-  display: block;
-}
-
-/* BOTTOM INFO */
-
-.card-info{
-  padding: 1.5rem;
+  padding: 12px;
 
   background: linear-gradient(
     to bottom,
-    #117686,
-    #35c7e8
+    rgba(17, 118, 134, 0.9),
+    rgba(53, 199, 232, 0.9)
   );
 
   color: white;
 }
 
-/* GAME NAME */
-
 .game-name{
-  font-size: 2.3rem;
-  font-weight: 700;
-
   margin: 0;
+  font-size: 16px;
+  font-weight: 700;
 }
-
-/* PLATFORM */
 
 .platform{
-  font-size: 1.1rem;
+  margin-top: 4px;
+  margin-bottom: 12px;
 
-  margin-top: 0.4rem;
-  margin-bottom: 1.8rem;
+  font-size: 12px;
 }
 
-/* BOTTOM ROW */
 
-.bottom-row{
+
+.bottom-row {
+
   display: flex;
 
   justify-content: space-between;
@@ -148,28 +112,29 @@ defineProps({
 
 /* RATING */
 
-.rating-section{
+.rating-section {
+
   display: flex;
   align-items: center;
 
   gap: 0.8rem;
 }
 
+
+
 .star{
   color: #ffe66d;
 
-  font-size: 3rem;
+  font-size: 18px;
 }
 
 .rating{
-  font-size: 2.2rem;
+  font-size: 16px;
   font-weight: 700;
 }
 
-/* REVIEWS */
-
 .reviews{
-  font-size: 1.1rem;
+  font-size: 12px;
 }
 
 </style>
