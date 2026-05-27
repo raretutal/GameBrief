@@ -28,29 +28,23 @@ import Search from '../../assets/icons/SearchG.png'
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 10px;
 
-  background: #e7e7e7;
+  background: #f2f2f2;
 
-  padding: 16px 24px;
+  padding: 10px 18px;
 
-  border-radius: 28px;
+  border-radius: 12px;
 
-  width: 850px;
+  width: 420px;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
 }
-
-/* ICON */
 
 .search-icon{
-  width: 32px;
-  height: 32px;
-
-  object-fit: contain;
-
-  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
 }
-
-/* INPUT */
 
 .search-input{
   border: none;
@@ -60,13 +54,9 @@ import Search from '../../assets/icons/SearchG.png'
 
   width: 100%;
 
-  font-size: 2rem;
+  font-size: 14px;
 
-  color: #6b7280;
-}
-
-.search-input::placeholder{
-  color: #6b7280;
+  color: #555;
 }
 
 </style>
