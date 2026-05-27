@@ -8,10 +8,9 @@ import CS2 from '../assets/sample/CS2.jpg'
 </script>
 
 <template>
-  <main class="homepage">
-
+  <main>
     <NavBar />
-
+    <div class="homepage">
     <!-- HERO -->
     <section class="hero-section">
 
@@ -100,7 +99,7 @@ import CS2 from '../assets/sample/CS2.jpg'
       </div>
 
     </section>
-
+    </div>
   </main>
 </template>
 
