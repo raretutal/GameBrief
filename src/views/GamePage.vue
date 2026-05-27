@@ -31,7 +31,7 @@
             <h1 class="text-4xl md:text-5xl font-black tracking-tight">{{ gameData.title }}</h1>
             <span class="text-xl text-zinc-400 font-medium">{{ gameData.releaseYear }}</span>
           </div>
-          <h2 class="text-base text-indigo-400 font-semibold mb-6">Developed by {{ gameData.developer }}</h2>
+          <h2 class="text-base text-[#35CCE0] font-semibold mb-6">Developed by {{ gameData.developer }}</h2>
 
           <section class="mb-10">
             <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 mb-3 border-b border-zinc-800 pb-2">
