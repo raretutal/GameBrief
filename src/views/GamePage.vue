@@ -8,7 +8,7 @@
         alt="Game Backdrop"
         class="w-full h-full object-cover opacity-40"
       />
-      <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-linear-to-t from-zinc-900 via-transparent to-transparent"></div>
     </div>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 md:-mt-32 relative z-10 pb-20">
@@ -20,7 +20,7 @@
             alt="Game Poster"
             class="w-48 md:w-full rounded-lg shadow-2xl border border-zinc-700 object-cover aspect-[2/3]"
           />
-          <button class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-4 rounded transition-colors shadow-lg">
+          <button class="w-full bg-linear-to-r from-[#35CCE0] to-[#1D6F7A] hover:opacity-80 text-white font-bold py-2 px-4 rounded transition-colors shadow-lg">
             Review or Log
           </button>
         </div>
