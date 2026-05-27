@@ -1,13 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import GamePage from '../views/GamePage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/', // Change for home view
       name: 'home',
-      component: HomeView,
+      component: GamePage
     },
     {
       path: '/about',
@@ -17,6 +18,11 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    {
+      path: '/GamePage',
+      name: 'GamePage',
+      component: GamePage
+    }
   ],
 })
 
