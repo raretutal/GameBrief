@@ -26,7 +26,7 @@ import CS2 from '../assets/sample/CS2.jpg'
     <section class="content-section">
 
       <h2 class="section-title">
-        >> TRENDING NOW
+      TRENDING NOW
       </h2>
 
       <div class="trending-container">
