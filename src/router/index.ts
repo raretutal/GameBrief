@@ -4,6 +4,7 @@ import GamePage from '../views/GamePage.vue'
 import ReviewsPage from '../views/ReviewsPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import EditProfile from '@/views/EditProfile.vue'
+import DevelopersPage from '@/views/DevelopersPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +36,11 @@ const router = createRouter({
       path: '/profile',
       name: 'Profile',
       component: ProfilePage
+    },
+    {
+      path: '/developerspage',
+      name: 'DevelopersPage',
+      component: DevelopersPage
     },
     {
       path: '/edit',
