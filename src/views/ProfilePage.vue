@@ -44,12 +44,10 @@
             
             <!-- Followers/Following Cards -->
             <div class="grid grid-cols-2 gap-4 mt-4">
-              <div class="bg-gradient-to-r from-[#EC2D8F] to-[#D91A7A] rounded-2xl p-6 text-center">
-                <div class="text-4xl font-black text-white mb-1 font-behoveful">{{ profileData.followers }}</div>
+                <div class="bg-gradient-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-6 text-center">                <div class="text-4xl font-black text-white mb-1 font-behoveful">{{ profileData.followers }}</div>
                 <div class="text-white/80 font-medium">Followers</div>
               </div>
-              <div class="bg-gradient-to-r from-[#EC2D8F] to-[#D91A7A] rounded-2xl p-6 text-center">
-                <div class="text-4xl font-black text-white mb-1 font-behoveful">{{ profileData.following }}</div>
+              <div class="bg-gradient-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-6 text-center">                <div class="text-4xl font-black text-white mb-1 font-behoveful">{{ profileData.following }}</div>
                 <div class="text-white/80 font-medium">Following</div>
               </div>
             </div>
@@ -143,7 +141,9 @@
   <script setup lang="ts">
   import { ref } from 'vue'
   import NavBar from '@/components/NavBar.vue'
-  
+
+// swap out the static data with API calls to fetch the actual user's profile, reviews, and games
+
   const profileData = ref({
     username: 'ShadowGamer92',
     bio: 'the quick brown fox jumped over the lazy dog',
