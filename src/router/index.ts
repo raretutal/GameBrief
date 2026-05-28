@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomePage from '../views/HomePage.vue'
 import GamePage from '../views/GamePage.vue'
+import ReviewsPage from '../views/ReviewsPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 
 const router = createRouter({
@@ -8,8 +9,8 @@ const router = createRouter({
   routes: [
     {
       path: '/', // Change for home view
-      name: 'home',
-      component: GamePage
+      name: 'HomePage',
+      component: HomePage
     },
     {
       path: '/about',
@@ -20,9 +21,14 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
-      path: '/GamePage',
+      path: '/games',
       name: 'GamePage',
       component: GamePage
+    },
+    {
+      path: '/reviews',
+      name: 'ReviewsPage',
+      component: ReviewsPage
     },
     {
       path: '/profile',
