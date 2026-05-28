@@ -12,7 +12,7 @@
         <div class="hidden md:flex space-x-8">
           <router-link to="/" class="text-sm font-medium hover:text-indigo-400 transition-colors">Home</router-link>
           <router-link to="/games" class="text-sm font-medium hover:text-indigo-400 transition-colors">Games</router-link>
-          <router-link to="/reviews" class="text-sm font-medium hover:text-indigo-400 transition-colors">Reviews</router-link>
+          <router-link to="/developerspage" class="text-sm font-medium hover:text-indigo-400 transition-colors">Developers</router-link>
         </div>
 
         <div class="flex items-center space-x-4">

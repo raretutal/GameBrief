@@ -20,7 +20,9 @@
             alt="Game Poster"
             class="w-48 md:w-full rounded-lg shadow-2xl border border-zinc-700 object-cover aspect-[2/3]"
           />
-          <button class="w-full bg-linear-to-r from-[#35CCE0] to-[#1D6F7A] hover:opacity-80 text-white font-bold py-2 px-4 rounded transition-colors shadow-lg">
+          <button
+            @click="showReviewModal=true"  
+            class="w-full bg-linear-to-r from-[#35CCE0] to-[#1D6F7A] hover:opacity-80 text-white font-bold py-2 px-4 rounded transition-colors shadow-lg">
             Review or Log
           </button>
         </div>
@@ -61,11 +63,30 @@
       </div>
     </main>
   </div>
+
+  <!--WriteReview component-->
+  <WriteRewview
+    v-if="showReviewModal"
+    @close="showReviewModal = false"
+    @submit="handleReviewSubmit"
+ />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import NavBar from '@/components/NavBar.vue';
+import WriteRewview from '@/components/PageComponents/WriteReview.vue'
+
+
+// for WriteReview pop-up
+const showReviewModal = ref(false)
+
+const handleReviewSubmit = (reviewData: { rating: number; text: string }) => {
+  console.log('Review Submitted:', reviewData);
+  // Add logic here later to send data to Supabase
+};
+
+
 
 // State holding the specific game's data
 // This will eventually be populated via a Supabase fetch call
@@ -77,4 +98,6 @@ const gameData = ref({
   posterUrl: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=600&auto=format&fit=crop', 
   synopsis: 'Forge your own path in Hollow Knight! An epic action adventure through a vast ruined kingdom of insects and heroes. Explore twisting caverns, battle tainted creatures and befriend bizarre bugs, all in a classic, hand-drawn 2D style.'
 });
+
+
 </script>
