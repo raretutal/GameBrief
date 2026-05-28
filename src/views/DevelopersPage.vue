@@ -1,6 +1,8 @@
 <template>
   <NavBar/>
+  <!--Main background-->
   <div class="min-h-screen w-full bg-[radial-gradient(circle_at_top,#3b3b3b_0%,#111_45%,#000_100%)] px-4 py-12 sm:px-6 lg:px-8">
+    <!--Developer card-->
     <div class="max-w-7xl mx-auto">
       
       <h1 class="text-4xl font-bold text-white mb-10 text-center font-silkscreen">
@@ -18,6 +20,7 @@
       </div>
 
     </div>
+    
   </div>
 </template>
 
