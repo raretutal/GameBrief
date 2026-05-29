@@ -5,6 +5,8 @@ import ReviewsPage from '../views/ReviewsPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import EditProfile from '@/views/EditProfile.vue'
 import DevelopersPage from '@/views/DevelopersPage.vue'
+import SignUp from '@/views/SignUp.vue'
+import SignIn from '@/views/SignIn.vue'
 import LandingPage from '@/views/LandingPage.vue'
 
 const router = createRouter({
@@ -42,6 +44,16 @@ const router = createRouter({
       path: '/developerspage',
       name: 'DevelopersPage',
       component: DevelopersPage
+    },
+    {
+      path: '/signup',
+      name: 'SignUp',
+      component: SignUp
+    },
+    {
+      path: '/signin',
+      name: 'SignIn',
+      component: SignIn
     },
     {
       path: '/landing',
