@@ -56,19 +56,30 @@
               {{ gameData.synopsis }}
             </p>
           </section>
-
+          <!---Review Cards section-->
           <section>
             <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 mb-4 border-b border-zinc-800 pb-2">
               Recent Reviews
             </h3>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="p-6 bg-zinc-950 rounded-lg border border-zinc-800 text-zinc-600 text-center text-sm border-dashed">
-                [ReviewCard Component Placeholder]
-              </div>
-              <div class="p-6 bg-zinc-950 rounded-lg border border-zinc-800 text-zinc-600 text-center text-sm border-dashed">
-                [ReviewCard Component Placeholder]
-              </div>
+            <div v-if="loadingReviews" class="text-zinc-500 text-sm">
+              Loading reviews...
+            </div>
+            
+            <div v-else-if="reviews.length === 0" class="text-zinc-500 text-sm">
+              No reviews yet. Be the first to review!
+            </div>
+            
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ReviewCard
+                v-for="review in reviews"
+                :key="review.user_id + '_' + review.created_at"
+                :username="review.username"
+                :user_image="review.user_image"
+                :star_rating="review.star_rating"
+                :comment_text="review.comment_text"
+                :created_at="review.created_at"
+              />
             </div>
           </section>
 
@@ -88,8 +99,11 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
-import WriteRewview from '@/components/PageComponents/WriteReview.vue'
-import { getGameById } from '@/services/gameService'
+import WriteRewview from '@/components/PageComponents/WriteReview.vue';
+import ReviewCard from '@/components/PageComponents/ReviewCard.vue'; // NEW
+import { getGameById } from '@/services/gameService';
+import { getReviewsByGameId } from '@/services/reviewService'; // NEW
+import type { Review } from '@/interfaces/Review'; // NEW
 
 const route = useRoute();
 const showReviewModal = ref(false)
@@ -98,7 +112,6 @@ const handleReviewSubmit = (reviewData: { rating: number; text: string }) => {
   console.log('Review Submitted:', reviewData);
 };
 
-// HELPER FUNCTION: Converts a standard YouTube link into a background-ready embed URL
 const getYouTubeEmbedUrl = (url: string | null) => {
   if (!url) return null;
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -106,15 +119,11 @@ const getYouTubeEmbedUrl = (url: string | null) => {
 
   if (match && match[2] && match[2].length === 11) {
     const videoId = match[2];
-    // mute=1 and autoplay=1 are required by browsers for autoplay to work.
-    // loop=1 requires playlist=VIDEO_ID to loop properly.
-    // controls=0 and disablekb=1 hide the YouTube UI.
     return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&disablekb=1&modestbranding=1&showinfo=0`;
   }
   return null;
 };
 
-// Added videoUrl to the reactive state
 const gameData = ref({
   title: 'Loading...',
   releaseYear: '',
@@ -125,24 +134,36 @@ const gameData = ref({
   videoUrl: null as string | null
 });
 
+// NEW: Reactive variables for reviews
+const reviews = ref<Review[]>([]);
+const loadingReviews = ref(true);
+
 onMounted(async () => {
   const gameId = Number(route.params.id);
   if (!gameId) return;
 
-  const { data, error } = await getGameById(gameId);
+  // Fetch Game Data
+  const { data: game, error: gameError } = await getGameById(gameId);
   
-  if (data) {
+  if (game) {
     gameData.value = {
-      title: data.title,
-      releaseYear: data.age_rating || 'NR', 
-      developer: data.developerName,
-      backdropUrl: data.thumbnail_url || 'https://via.placeholder.com/2000x800',
-      posterUrl: data.thumbnail_url || 'https://via.placeholder.com/600x900',
-      synopsis: data.description || 'No description available.',
-      videoUrl: getYouTubeEmbedUrl(data.video_url) // Map the video URL here
+      title: game.title,
+      releaseYear: game.age_rating || 'NR', 
+      developer: game.developerName,
+      backdropUrl: game.thumbnail_url || 'https://via.placeholder.com/2000x800',
+      posterUrl: game.thumbnail_url || 'https://via.placeholder.com/600x900',
+      synopsis: game.description || 'No description available.',
+      videoUrl: getYouTubeEmbedUrl(game.video_url) 
     };
   } else {
-    console.error('Failed to load game:', error);
+    console.error('Failed to load game:', gameError);
   }
+
+  // NEW: Fetch Review Data
+  const { data: reviewData } = await getReviewsByGameId(gameId);
+  if (reviewData) {
+    reviews.value = reviewData;
+  }
+  loadingReviews.value = false;
 });
 </script>
