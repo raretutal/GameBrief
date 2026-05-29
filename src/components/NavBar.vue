@@ -16,9 +16,20 @@
         </div>
 
         <div class="flex items-center space-x-4">
-          <button class="bg-linear-to-r from-[#35CCE0] to-[#1D6F7A] hover:opacity-80 px-4 py-2 rounded text-sm font-semibold transition-colors">
-            Sign In
-          </button>
+          <router-link v-if="!currentUser" to="/signin">
+            <button class="bg-linear-to-r from-[#35CCE0] to-[#1D6F7A] hover:opacity-80 px-4 py-2 rounded text-sm font-semibold transition-colors">
+              Sign In
+            </button>
+          </router-link>
+
+          <div v-else class="flex items-center space-x-4">
+            <router-link to="/profile" class="text-[#35CCE0] text-sm font-bold hover:underline">
+              {{ currentUser.username }}
+            </router-link>
+            <button @click="handleSignOut" class="text-zinc-400 hover:text-zinc-200 text-sm font-medium transition-colors">
+              Sign Out
+            </button>
+          </div>
         </div>
 
       </div>
@@ -27,5 +38,38 @@
 </template>
 
 <script setup lang="ts">
-// Logic for navigation state and user session will go here
+import { ref, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import type { User } from '@/interfaces/User'
+
+const route = useRoute()
+const router = useRouter()
+const currentUser = ref<User | null>(null)
+
+// Reads local storage to verify if a user data object exists
+const checkAuth = () => {
+  const storedUser = localStorage.getItem('currentUser')
+  if (storedUser) {
+    currentUser.value = JSON.parse(storedUser)
+  } else {
+    currentUser.value = null
+  }
+}
+
+// Executes auth check when the navigation bar is first rendered
+onMounted(() => {
+  checkAuth()
+})
+
+// Listens to URL changes to keep the auth state synchronized
+watch(() => route.path, () => {
+  checkAuth()
+})
+
+// Clears the session and redirects to the sign-in page
+const handleSignOut = () => {
+  localStorage.removeItem('currentUser')
+  currentUser.value = null
+  router.push('/signin')
+}
 </script>
