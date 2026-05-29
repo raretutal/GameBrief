@@ -88,8 +88,11 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
-import WriteRewview from '@/components/PageComponents/WriteReview.vue'
-import { getGameById } from '@/services/gameService'
+import WriteRewview from '@/components/PageComponents/WriteReview.vue';
+import ReviewCard from '@/components/PageComponents/ReviewCard.vue'; // NEW
+import { getGameById } from '@/services/gameService';
+import { getReviewsByGameId } from '@/services/reviewService'; // NEW
+import type { Review } from '@/interfaces/Review'; // NEW
 
 const route = useRoute();
 const showReviewModal = ref(false)
@@ -98,7 +101,6 @@ const handleReviewSubmit = (reviewData: { rating: number; text: string }) => {
   console.log('Review Submitted:', reviewData);
 };
 
-// HELPER FUNCTION: Converts a standard YouTube link into a background-ready embed URL
 const getYouTubeEmbedUrl = (url: string | null) => {
   if (!url) return null;
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -106,15 +108,11 @@ const getYouTubeEmbedUrl = (url: string | null) => {
 
   if (match && match[2] && match[2].length === 11) {
     const videoId = match[2];
-    // mute=1 and autoplay=1 are required by browsers for autoplay to work.
-    // loop=1 requires playlist=VIDEO_ID to loop properly.
-    // controls=0 and disablekb=1 hide the YouTube UI.
     return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&disablekb=1&modestbranding=1&showinfo=0`;
   }
   return null;
 };
 
-// Added videoUrl to the reactive state
 const gameData = ref({
   title: 'Loading...',
   releaseYear: '',
@@ -125,24 +123,36 @@ const gameData = ref({
   videoUrl: null as string | null
 });
 
+// NEW: Reactive variables for reviews
+const reviews = ref<Review[]>([]);
+const loadingReviews = ref(true);
+
 onMounted(async () => {
   const gameId = Number(route.params.id);
   if (!gameId) return;
 
-  const { data, error } = await getGameById(gameId);
+  // Fetch Game Data
+  const { data: game, error: gameError } = await getGameById(gameId);
   
-  if (data) {
+  if (game) {
     gameData.value = {
-      title: data.title,
-      releaseYear: data.age_rating || 'NR', 
-      developer: data.developerName,
-      backdropUrl: data.thumbnail_url || 'https://via.placeholder.com/2000x800',
-      posterUrl: data.thumbnail_url || 'https://via.placeholder.com/600x900',
-      synopsis: data.description || 'No description available.',
-      videoUrl: getYouTubeEmbedUrl(data.video_url) // Map the video URL here
+      title: game.title,
+      releaseYear: game.age_rating || 'NR', 
+      developer: game.developerName,
+      backdropUrl: game.thumbnail_url || 'https://via.placeholder.com/2000x800',
+      posterUrl: game.thumbnail_url || 'https://via.placeholder.com/600x900',
+      synopsis: game.description || 'No description available.',
+      videoUrl: getYouTubeEmbedUrl(game.video_url) 
     };
   } else {
-    console.error('Failed to load game:', error);
+    console.error('Failed to load game:', gameError);
   }
+
+  // NEW: Fetch Review Data
+  const { data: reviewData } = await getReviewsByGameId(gameId);
+  if (reviewData) {
+    reviews.value = reviewData;
+  }
+  loadingReviews.value = false;
 });
 </script>
