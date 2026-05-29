@@ -1,160 +1,129 @@
-<script setup>
-defineProps({
-  pfp: String,
-  username: String,
-  date: String,
-  review: String,
-  rating: Number,
-})
-</script>
-
 <template>
-  <div class="ReviewBox">
-
-    <!-- Profile Picture -->
-    <img
-      :src="pfp"
-      alt="profile_picture"
-      class="profile-pic"
-    />
-
-    <!-- Right Side Content -->
-    <div class="content">
-
-      <!-- Username + Date -->
-      <div class="top-row">
-        <h2 class="username">{{ username }}</h2>
-        <p class="date">{{ date }}</p>
+  <div class="review-item">
+    <div class="review-avatar">
+      <img :src="pfp" :alt="username" />
+    </div>
+    
+    <div class="review-content">
+      <div class="review-header">
+        <h4 class="username">{{ username }}</h4>
+        <div class="star-rating">
+          <svg 
+            v-for="i in 5" 
+            :key="i"
+            class="star" 
+            :class="{ filled: i <= Math.round(rating) }"
+            xmlns="http://www.w3.org/2000/svg" 
+            width="14" 
+            height="14" 
+            viewBox="0 0 24 24" 
+            fill="currentColor"
+          >
+            <polygon points="12 2 15.09 10.26 23.77 10.35 17.16 16.61 19.91 25.88 12 20.09 4.09 25.88 6.84 16.61 0.22 10.35 8.91 10.26 12 2"></polygon>
+          </svg>
+        </div>
       </div>
-
-      <!-- Rating -->
-      <div class="rating-section">
-        <span
-          v-for="n in 5"
-          :key="n"
-          class="star"
-        >
-          {{ n <= rating ? '★' : '☆' }}
-        </span>
-
-        <span class="rating-number">
-          {{ rating.toFixed(1) }}
-        </span>
-      </div>
-
-      <!-- Review -->
-      <p class="review-text">
-        {{ review }}
-      </p>
-
-      <!-- Link -->
-      <a href="#" class="review-link">
-        Go to Full Review
-      </a>
-
+      
+      <p class="review-text">{{ review }}</p>
+      
+      <p class="review-date">{{ date }}</p>
     </div>
   </div>
 </template>
 
-<style scoped>
-
-.ReviewBox {
-  display: flex;
-  align-items: flex-start;
-  border-radius: 12px;
-  gap: 16px;
-
-  width: 100%;
-
-  padding: 20px;
-
-  background: linear-gradient(
-    to right,
-    rgba(17, 118, 134, 0.95),
-    rgba(53, 199, 232, 0.95)
-  );
-
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
+<script setup lang="ts">
+interface Props {
+  pfp: string
+  username: string
+  date: string
+  rating: number
+  review: string
 }
 
-.profile-pic {
-  width: 54px;
-  height: 54px;
+defineProps<Props>()
+</script>
 
+<style scoped>
+.review-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00ffff 0%, #00bfff 100%);
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.review-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 50%;
 }
 
-
-.content {
-
+.review-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-
-  width: 100%;
+  gap: 6px;
 }
 
-.top-row {
-
+.review-header {
   display: flex;
   align-items: center;
-
-  gap: 14px;
-
-  margin-bottom: 8px;
+  gap: 10px;
+  justify-content: space-between;
 }
 
 .username {
-  margin: 0;
+  font-family: silkscreen;
   font-size: 14px;
-  font-weight: 700;
-}
-
-.date {
+  font-weight: 900;
   margin: 0;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.9);
+  color: white;
+  letter-spacing: 0.5px;
 }
 
-.rating-section {
-
+.star-rating {
   display: flex;
-  align-items: center;
-
-  gap: 6px;
-
-  margin-bottom: 12px;
-}
-
-
-
-
-
-.review-text {
-  margin: 0 0 18px 0;
-
-  font-size: 15px;
-
-  color: rgba(255, 255, 255, 0.95);
+  gap: 2px;
 }
 
 .star {
-  color: #FFD54A;
-  font-size: 18px;
+  color: rgba(255, 255, 255, 0.3);
+  transition: color 0.2s ease;
 }
 
-.rating-number {
-  font-size: 18px;
-  font-weight: bold;
-  margin-left: 8px;
+.star.filled {
+  color: #fbbf24;
 }
 
-.review-link {
-  width: fit-content;
-  color: white;
+.review-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 4px 0;
+  font-family: inherit;
+}
+
+.review-date {
   font-size: 12px;
-  text-decoration: underline;
+  color: rgba(0, 255, 255, 0.7);
+  margin: 0;
+  font-family: inherit;
 }
-
 </style>
