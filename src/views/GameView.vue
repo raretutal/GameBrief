@@ -56,19 +56,30 @@
               {{ gameData.synopsis }}
             </p>
           </section>
-
+          <!---Review Cards section-->
           <section>
             <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 mb-4 border-b border-zinc-800 pb-2">
               Recent Reviews
             </h3>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="p-6 bg-zinc-950 rounded-lg border border-zinc-800 text-zinc-600 text-center text-sm border-dashed">
-                [ReviewCard Component Placeholder]
-              </div>
-              <div class="p-6 bg-zinc-950 rounded-lg border border-zinc-800 text-zinc-600 text-center text-sm border-dashed">
-                [ReviewCard Component Placeholder]
-              </div>
+            <div v-if="loadingReviews" class="text-zinc-500 text-sm">
+              Loading reviews...
+            </div>
+            
+            <div v-else-if="reviews.length === 0" class="text-zinc-500 text-sm">
+              No reviews yet. Be the first to review!
+            </div>
+            
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ReviewCard
+                v-for="review in reviews"
+                :key="review.user_id + '_' + review.created_at"
+                :username="review.username"
+                :user_image="review.user_image"
+                :star_rating="review.star_rating"
+                :comment_text="review.comment_text"
+                :created_at="review.created_at"
+              />
             </div>
           </section>
 
