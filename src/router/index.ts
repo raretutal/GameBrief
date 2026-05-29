@@ -3,6 +3,7 @@ import HomePage from '../views/HomePage.vue'
 import GamePage from '../views/GamePage.vue'
 import ReviewsPage from '../views/ReviewsPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
+import EditProfile from '@/views/EditProfile.vue'
 import DevelopersPage from '@/views/DevelopersPage.vue'
 
 const router = createRouter({
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/developerspage',
       name: 'DevelopersPage',
       component: DevelopersPage
+    },
+    {
+      path: '/edit',
+      name: 'edit',
+      component: EditProfile
     }
   ],
 })
