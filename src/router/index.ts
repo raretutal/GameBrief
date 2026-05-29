@@ -65,6 +65,11 @@ const router = createRouter({
       path: '/game/:id',
       name: 'GameView',
       component: GameView
+    },
+    {
+      path: '/edit',
+      name: 'editprofile',
+      component: EditProfile
     }
   ],
 })
