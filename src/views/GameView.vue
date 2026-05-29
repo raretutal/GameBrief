@@ -2,14 +2,27 @@
   <div class="min-h-screen bg-zinc-900 text-zinc-100 font-sans">
     <NavBar />
 
-    <div class="relative w-full h-64 md:h-96 bg-zinc-800">
-      <img
-        :src="gameData.backdropUrl"
-        alt="Game Backdrop"
-        class="w-full h-full object-cover opacity-40"
-      />
-      <div class="absolute inset-0 bg-linear-to-t from-zinc-900 via-transparent to-transparent"></div>
-    </div>
+      <div class="relative w-full h-80 md:h-[450px] overflow-hidden bg-zinc-950"> 
+        
+        <iframe
+          v-if="gameData.videoUrl"
+          :src="gameData.videoUrl"
+          class="absolute top-1/2 left-1/2 w-[150vw] h-[150vh] min-h-[800px] -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-40"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+        ></iframe>
+        
+        <img
+          v-else
+          :src="gameData.backdropUrl"
+          alt="Backdrop"
+          class="absolute inset-0 w-full h-full object-cover opacity-40"
+        />
+
+        <div class="relative z-10"></div>
+
+      </div>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 md:-mt-32 relative z-10 pb-20">
       <div class="flex flex-col md:flex-row gap-8">
@@ -64,12 +77,11 @@
     </main>
   </div>
 
-  <!--WriteReview component-->
   <WriteRewview
     v-if="showReviewModal"
     @close="showReviewModal = false"
     @submit="handleReviewSubmit"
- />
+  />
 </template>
 
 <script setup lang="ts">
@@ -79,47 +91,55 @@ import NavBar from '@/components/NavBar.vue';
 import WriteRewview from '@/components/PageComponents/WriteReview.vue'
 import { getGameById } from '@/services/gameService'
 
-// Initialize the router to read the URL parameters
 const route = useRoute();
-
-// for WriteReview pop-up
 const showReviewModal = ref(false)
 
 const handleReviewSubmit = (reviewData: { rating: number; text: string }) => {
   console.log('Review Submitted:', reviewData);
-  // Add logic here later to send data to Supabase
 };
 
-// Default loading state
+// HELPER FUNCTION: Converts a standard YouTube link into a background-ready embed URL
+const getYouTubeEmbedUrl = (url: string | null) => {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+
+  if (match && match[2] && match[2].length === 11) {
+    const videoId = match[2];
+    // mute=1 and autoplay=1 are required by browsers for autoplay to work.
+    // loop=1 requires playlist=VIDEO_ID to loop properly.
+    // controls=0 and disablekb=1 hide the YouTube UI.
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&disablekb=1&modestbranding=1&showinfo=0`;
+  }
+  return null;
+};
+
+// Added videoUrl to the reactive state
 const gameData = ref({
   title: 'Loading...',
   releaseYear: '',
   developer: 'Loading...',
   backdropUrl: 'https://via.placeholder.com/2000x800', 
   posterUrl: 'https://via.placeholder.com/600x900', 
-  synopsis: 'Loading details...'
+  synopsis: 'Loading details...',
+  videoUrl: null as string | null
 });
 
-// Fetch data when the component mounts
 onMounted(async () => {
-  // Extract the game ID from the URL (e.g., /game/3 -> 3)
   const gameId = Number(route.params.id);
-  
   if (!gameId) return;
 
   const { data, error } = await getGameById(gameId);
   
   if (data) {
-    // Map the database response to the UI state
     gameData.value = {
       title: data.title,
-      // The schema doesn't have a release_year yet, so we can use age_rating as a UI placeholder for now
       releaseYear: data.age_rating || 'NR', 
       developer: data.developerName,
-      // Since your schema only has one thumbnail_url, we use it for both images
       backdropUrl: data.thumbnail_url || 'https://via.placeholder.com/2000x800',
       posterUrl: data.thumbnail_url || 'https://via.placeholder.com/600x900',
-      synopsis: data.description || 'No description available.'
+      synopsis: data.description || 'No description available.',
+      videoUrl: getYouTubeEmbedUrl(data.video_url) // Map the video URL here
     };
   } else {
     console.error('Failed to load game:', error);
