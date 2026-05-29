@@ -8,6 +8,7 @@ import DevelopersPage from '@/views/DevelopersPage.vue'
 import SignUp from '@/views/SignUp.vue'
 import SignIn from '@/views/SignIn.vue'
 import LandingPage from '@/views/LandingPage.vue'
+import GameView from '@/views/GameView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,6 +60,11 @@ const router = createRouter({
       path: '/landing',
       name: 'LandingPage',
       component: LandingPage
+    },
+    {
+      path: '/gameview',
+      name: 'GameView',
+      component: GameView
     }
   ],
 })
