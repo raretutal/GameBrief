@@ -22,7 +22,7 @@
       </h1>
 
       <p class="text-white/80 mb-6 max-w-md">
-        Bio: {{ profileData.bio }}
+        Bio &gt;_&lt; {{ profileData.bio }}
       </p>
 
       <div class="flex gap-3">
@@ -85,23 +85,44 @@
           </h3>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <div v-if="loadingReviews" class="text-zinc-500 text-sm col-span-2">
+              Loading reviews...
+            </div>
+            
+            <div v-else-if="userReviews.length === 0" class="text-zinc-500 text-sm col-span-2">
+              You haven't reviewed any games yet.
+            </div>
+
             <div
-              v-for="review in recentReviews"
-              :key="review.id"
-              class="p-6 bg-zinc-950 rounded-lg border border-zinc-800 hover:border-[#35CCE0]/50 transition cursor-pointer"
-              @click="selectReview(review.id)"
+              v-else
+              v-for="review in userReviews"
+              :key="review.game_id + '_' + review.created_at"
+              class="p-6 bg-zinc-950 rounded-lg border border-zinc-800 hover:border-[#35CCE0]/50 transition cursor-pointer relative group"
+              @click="openEditModal(review)"
             >
               <div class="flex items-start justify-between mb-3">
                 <div>
-                  <h4 class="font-bold text-zinc-100 mb-1">{{ review.title }}</h4>
-                  <p class="text-xs text-zinc-500">{{ review.date }}</p>
+                  <h4 class="font-bold text-zinc-100 mb-1">{{ review.game_title }}</h4>
+                  <p class="text-xs text-zinc-500">{{ new Date(review.created_at).toLocaleDateString() }}</p>
                 </div>
                 <div class="flex gap-1 text-lg text-[#F5D76E]">
                   <span v-for="i in 5" :key="i">
-                    {{ i <= review.rating ? '★' : '☆' }}
+                    {{ i <= review.star_rating ? '★' : '☆' }}
                   </span>
                 </div>
               </div>
+              
+              <p v-if="review.comment_text" class="text-zinc-400 text-sm line-clamp-2 mt-2">
+                {{ review.comment_text }}
+              </p>
+
+              <button 
+                @click.stop="handleDeleteReview(review)"
+                class="absolute bottom-4 right-4 text-xs font-bold text-red-500 opacity-0 group-hover:opacity-100 hover:underline transition-opacity"
+              >
+                DELETE
+              </button>
             </div>
           </div>
         </section>
@@ -136,6 +157,16 @@
           </button>
         </section>
       </main>
+
+      <WriteReview
+        v-if="showReviewModal"
+        :gameId="selectedReview?.game_id"
+        :initialRating="selectedReview?.star_rating"
+        :initialText="selectedReview?.comment_text || ''"
+        :isEditing="true"
+        @close="showReviewModal = false"
+        @submit="handleReviewUpdate"
+      />
     </div>
 </template>
   
@@ -143,12 +174,14 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
+import WriteReview from '@/components/PageComponents/WriteReview.vue'
 import { getUserProfile } from '@/services/profileService'
+import { getReviewsByUserId, updateReview, deleteReview } from '@/services/reviewService'
 import type { UserProfileData } from '@/interfaces/UserProfileData'
+import type { UserReview } from '@/interfaces/UserReview'
 
 const router = useRouter()
 
-// Reactive reference to hold the current profile data
 const profileData = ref<UserProfileData>({
   username: 'Loading...',
   bio: '',
@@ -160,50 +193,94 @@ const profileData = ref<UserProfileData>({
   following: 0,
 })
 
-// Static data maintained for recent reviews and games section
-const recentReviews = ref([
-  { id: 1, title: 'Elden Ring', date: 'Today', rating: 5 },
-  { id: 2, title: 'Hollow Knight', date: '2 days ago', rating: 4 },
-  { id: 3, title: 'Hades', date: '1 week ago', rating: 5 },
-  { id: 4, title: 'Stardew Valley', date: '2 weeks ago', rating: 3 },
-])
+// Variables for managing the user's reviews and the modal state
+const userReviews = ref<UserReview[]>([])
+const loadingReviews = ref(true)
+const showReviewModal = ref(false)
+const selectedReview = ref<UserReview | null>(null)
 
 const myGames = ref(Array(6).fill(null).map(() => ({
   image: null,
 })))
 
-const selectReview = (reviewId: number) => {
-  console.log('Navigate to review:', reviewId)
-}
-
 const selectGame = (gameIndex: number) => {
   console.log('Navigate to game:', gameIndex)
 }
 
-// Clear local session and redirect
 const logout = () => {
   localStorage.removeItem('currentUser')
   router.push('/signin')
 }
 
-// Executes data fetching right when the component is mounted
+// Data fetching helper to keep data in sync
+const loadReviews = async (userId: number) => {
+  loadingReviews.value = true
+  const { data } = await getReviewsByUserId(userId)
+  if (data) {
+    userReviews.value = data
+  }
+  loadingReviews.value = false
+}
+
+const openEditModal = (review: UserReview) => {
+  selectedReview.value = review
+  showReviewModal.value = true
+}
+
+const handleReviewUpdate = async (reviewData: { rating: number; text: string }) => {
+  if (selectedReview.value) {
+    const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
+    
+    // Attempt to update the review in the database
+    await updateReview(
+      storedUser.user_id, 
+      selectedReview.value.game_id, 
+      selectedReview.value.created_at, 
+      reviewData.rating, 
+      reviewData.text
+    )
+    
+    showReviewModal.value = false
+    
+    // Re-fetch the data to update the UI (updates both the cards and the header statistics)
+    await loadReviews(storedUser.user_id)
+    const { data: updatedProfileData } = await getUserProfile(storedUser.user_id)
+    if (updatedProfileData) profileData.value = updatedProfileData
+  }
+}
+
+const handleDeleteReview = async (review: UserReview) => {
+  if (confirm(`Are you sure you want to delete your review for ${review.game_title}?`)) {
+    const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
+    
+    await deleteReview(storedUser.user_id, review.game_id, review.created_at)
+    
+    // Re-fetch the data to update the UI
+    await loadReviews(storedUser.user_id)
+    const { data: updatedProfileData } = await getUserProfile(storedUser.user_id)
+    if (updatedProfileData) profileData.value = updatedProfileData
+  }
+}
+
 onMounted(async () => {
   const storedUser = localStorage.getItem('currentUser')
   
   if (!storedUser) {
-    // If not logged in, enforce redirection to sign in page
     router.push('/signin')
     return
   }
 
   const user = JSON.parse(storedUser)
   
+  // Fetch initial profile stats
   const { data, error } = await getUserProfile(user.user_id)
-  
   if (data) {
     profileData.value = data
   } else {
     console.error('Failed to load profile data:', error)
   }
+
+  // Fetch the user's reviews
+  await loadReviews(user.user_id)
 })
 </script>

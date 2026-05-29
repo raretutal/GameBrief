@@ -88,7 +88,7 @@
     </main>
   </div>
 
-  <WriteRewview
+  <WriteReview
     v-if="showReviewModal"
     @close="showReviewModal = false"
     @submit="handleReviewSubmit"
@@ -97,19 +97,50 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router'; // ADDED: useRouter
 import NavBar from '@/components/NavBar.vue';
-import WriteRewview from '@/components/PageComponents/WriteReview.vue';
-import ReviewCard from '@/components/PageComponents/ReviewCard.vue'; // NEW
+import WriteReview from '@/components/PageComponents/WriteReview.vue';
+import ReviewCard from '@/components/PageComponents/ReviewCard.vue';
 import { getGameById } from '@/services/gameService';
-import { getReviewsByGameId } from '@/services/reviewService'; // NEW
-import type { Review } from '@/interfaces/Review'; // NEW
+// UPDATED: Added addReview import
+import { getReviewsByGameId, addReview } from '@/services/reviewService'; 
+import type { Review } from '@/interfaces/Review';
 
 const route = useRoute();
+const router = useRouter(); // ADDED: to handle redirects if not logged in
 const showReviewModal = ref(false)
 
-const handleReviewSubmit = (reviewData: { rating: number; text: string }) => {
-  console.log('Review Submitted:', reviewData);
+// UPDATED: Implementation to save data instead of just console.log
+const handleReviewSubmit = async (reviewData: { rating: number; text: string }) => {
+  const storedUser = localStorage.getItem('currentUser');
+  
+  if (!storedUser) {
+    alert('You must be logged in to leave a review.');
+    router.push('/signin');
+    return;
+  }
+
+  const user = JSON.parse(storedUser);
+  const gameId = Number(route.params.id);
+
+  // Call the database insert service
+  const { error } = await addReview(user.user_id, gameId, reviewData.rating, reviewData.text);
+
+  if (error) {
+    console.error('Failed to add review:', error);
+    alert('Failed to save review. You may have already reviewed this game.');
+  } else {
+    // Close the modal
+    showReviewModal.value = false;
+    
+    // Refresh the reviews list immediately to show the new review
+    loadingReviews.value = true;
+    const { data: refreshedReviews } = await getReviewsByGameId(gameId);
+    if (refreshedReviews) {
+      reviews.value = refreshedReviews;
+    }
+    loadingReviews.value = false;
+  }
 };
 
 const getYouTubeEmbedUrl = (url: string | null) => {
@@ -134,7 +165,6 @@ const gameData = ref({
   videoUrl: null as string | null
 });
 
-// NEW: Reactive variables for reviews
 const reviews = ref<Review[]>([]);
 const loadingReviews = ref(true);
 
@@ -142,7 +172,6 @@ onMounted(async () => {
   const gameId = Number(route.params.id);
   if (!gameId) return;
 
-  // Fetch Game Data
   const { data: game, error: gameError } = await getGameById(gameId);
   
   if (game) {
@@ -159,7 +188,6 @@ onMounted(async () => {
     console.error('Failed to load game:', gameError);
   }
 
-  // NEW: Fetch Review Data
   const { data: reviewData } = await getReviewsByGameId(gameId);
   if (reviewData) {
     reviews.value = reviewData;

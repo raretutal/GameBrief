@@ -54,11 +54,20 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+// Define the incoming props for editing
+const props = defineProps<{
+  gameId?: number;
+  initialRating?: number;
+  initialText?: string;
+  isEditing?: boolean;
+}>();
+
 const emit = defineEmits(['close', 'submit']);
 
-const currentRating = ref(0);
+// Use the original variable names, but initialize them with the props if they exist
+const currentRating = ref(props.initialRating || 0);
 const hoverRating = ref(0);
-const reviewText = ref('');
+const reviewText = ref(props.initialText || '');
 
 const setRating = (val: number) => {
   currentRating.value = val;
@@ -76,6 +85,8 @@ const submitReview = () => {
     text: reviewText.value
   });
   
+  // Note: Depending on your GameView logic, you may or may not need closeModal() here. 
+  // Keeping it to match your original file.
   closeModal();
 };
 </script>
