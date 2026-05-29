@@ -3,14 +3,11 @@
       <NavBar />
   
       <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <!-- Profile Header Section -->
         <div class="flex flex-col lg:flex-row gap-6">
           
-<!-- Main Profile Card -->
 <div class="flex-1">
   <div class="bg-gradient-to-r from-[#35CCE0] to-[#1D8A9A] rounded-2xl p-8 flex flex-col sm:flex-row items-center sm:items-start gap-6">
     
-    <!-- Avatar -->
     <div class="w-32 h-32 rounded-full border-2 border-white/30 flex-shrink-0 overflow-hidden">
       <img
         :src="profileData.avatarUrl"
@@ -19,17 +16,15 @@
       />
     </div>
 
-    <!-- Info -->
     <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
       <h1 class="text-3xl md:text-4xl font-black text-white mb-2 font-behoveful">
         &lt;{{ profileData.username }}&gt;
       </h1>
 
       <p class="text-white/80 mb-6 max-w-md">
-        Bio &gt;_&lt; {{ profileData.bio }}
+        Bio: {{ profileData.bio }}
       </p>
 
-      <!-- Buttons -->
       <div class="flex gap-3">
         <router-link
           to="/edit"
@@ -49,7 +44,6 @@
     </div>
   </div>
 
-  <!-- Followers/Following Cards -->
   <div class="grid grid-cols-2 gap-4 mt-4">
     <div class="bg-gradient-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-6 text-center">
       <div class="text-4xl font-black text-white mb-1 font-behoveful">
@@ -67,21 +61,17 @@
   </div>
 </div>
           
-          <!-- Stats Cards (Right Side) -->
           <div class="flex flex-col gap-4 lg:w-48">
-            <!-- Reviews -->
             <div class="bg-gradient-to-br from-[#EC2D8F] to-[#B91C6A] rounded-2xl p-6">
               <div class="text-4xl font-black text-white mb-1 font-behoveful">{{ profileData.reviewCount }}</div>
               <div class="text-white/80 font-medium">Reviews</div>
             </div>
             
-            <!-- Games -->
             <div class="bg-gradient-to-br from-[#35CCE0] to-[#1D8A9A] rounded-2xl p-6">
               <div class="text-4xl font-black text-white mb-1 font-behoveful">{{ profileData.gameCount }}</div>
               <div class="text-white/80 font-medium">Games</div>
             </div>
             
-            <!-- Average Rating -->
             <div class="bg-gradient-to-br from-[#F5D76E] to-[#D4A84B] rounded-2xl p-6">
               <div class="text-4xl font-black text-white mb-1 font-behoveful">{{ profileData.avgRating }}</div>
               <div class="text-white/80 font-medium">Average Rating</div>
@@ -89,7 +79,6 @@
           </div>
         </div>
   
-        <!-- Recent Reviews Section -->
         <section class="mt-16">
           <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 mb-4 border-b border-zinc-800 pb-2">
             Recent Reviews
@@ -117,7 +106,6 @@
           </div>
         </section>
   
-        <!-- My Games Section -->
         <section class="mt-16">
           <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 mb-4 border-b border-zinc-800 pb-2">
             My Games
@@ -138,7 +126,6 @@
           </div>
         </section>
   
-        <!-- Logout Button -->
         <section class="mt-16 mb-8">
           <button
             class="text-[#EC2D8F] text-lg font-bold hover:text-[#EC2D8F]/80 transition flex items-center gap-2 uppercase tracking-wider"
@@ -150,45 +137,73 @@
         </section>
       </main>
     </div>
-  </template>
+</template>
   
-  <script setup lang="ts">
-  import { ref } from 'vue'
-  import NavBar from '@/components/NavBar.vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import NavBar from '@/components/NavBar.vue'
+import { getUserProfile } from '@/services/profileService'
+import type { UserProfileData } from '@/interfaces/UserProfileData'
 
-// swap out the static data with API calls to fetch the actual user's profile, reviews, and games
+const router = useRouter()
 
-  const profileData = ref({
-    username: 'ShadowGamer92',
-    bio: 'the quick brown fox jumped over the lazy dog',
-    avatarUrl: 'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?q=80&w=600&auto=format&fit=crop',
-    reviewCount: 67,
-    gameCount: 67,
-    avgRating: 4.0,
-    followers: 67,
-    following: 67,
-  })
+// Reactive reference to hold the current profile data
+const profileData = ref<UserProfileData>({
+  username: 'Loading...',
+  bio: '',
+  avatarUrl: 'https://via.placeholder.com/150',
+  reviewCount: 0,
+  gameCount: 0,
+  avgRating: 0,
+  followers: 0,
+  following: 0,
+})
+
+// Static data maintained for recent reviews and games section
+const recentReviews = ref([
+  { id: 1, title: 'Elden Ring', date: 'Today', rating: 5 },
+  { id: 2, title: 'Hollow Knight', date: '2 days ago', rating: 4 },
+  { id: 3, title: 'Hades', date: '1 week ago', rating: 5 },
+  { id: 4, title: 'Stardew Valley', date: '2 weeks ago', rating: 3 },
+])
+
+const myGames = ref(Array(6).fill(null).map(() => ({
+  image: null,
+})))
+
+const selectReview = (reviewId: number) => {
+  console.log('Navigate to review:', reviewId)
+}
+
+const selectGame = (gameIndex: number) => {
+  console.log('Navigate to game:', gameIndex)
+}
+
+// Clear local session and redirect
+const logout = () => {
+  localStorage.removeItem('currentUser')
+  router.push('/signin')
+}
+
+// Executes data fetching right when the component is mounted
+onMounted(async () => {
+  const storedUser = localStorage.getItem('currentUser')
   
-  const recentReviews = ref([
-    { id: 1, title: 'Elden Ring', date: 'Today', rating: 5 },
-    { id: 2, title: 'Hollow Knight', date: '2 days ago', rating: 4 },
-    { id: 3, title: 'Hades', date: '1 week ago', rating: 5 },
-    { id: 4, title: 'Stardew Valley', date: '2 weeks ago', rating: 3 },
-  ])
-  
-  const myGames = ref(Array(6).fill(null).map(() => ({
-    image: null,
-  })))
-  
-  const selectReview = (reviewId: number) => {
-    console.log('Navigate to review:', reviewId)
+  if (!storedUser) {
+    // If not logged in, enforce redirection to sign in page
+    router.push('/signin')
+    return
   }
+
+  const user = JSON.parse(storedUser)
   
-  const selectGame = (gameIndex: number) => {
-    console.log('Navigate to game:', gameIndex)
-  }
+  const { data, error } = await getUserProfile(user.user_id)
   
-  const logout = () => {
-    console.log('Handle logout')
+  if (data) {
+    profileData.value = data
+  } else {
+    console.error('Failed to load profile data:', error)
   }
+})
 </script>
