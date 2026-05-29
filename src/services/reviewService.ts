@@ -100,3 +100,23 @@ export const deleteReview = async (userId: number, gameId: number, createdAt: st
     return { error: err.message };
   }
 }
+
+// Adding a whole new review
+export const addReview = async (userId: number, gameId: number, starRating: number, commentText: string) => {
+  try {
+    const { error } = await supabase
+      .from('review')
+      .insert([
+        {
+          user_id: userId,
+          game_id: gameId,
+          star_rating: starRating,
+          comment_text: commentText
+        }
+      ]);
+      
+    return { error: error ? error.message : null };
+  } catch (err: any) {
+    return { error: err.message };
+  }
+}
