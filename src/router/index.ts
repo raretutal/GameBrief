@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
-import GamePage from '../views/GamePage.vue'
+import GamesPage from '../views/GamesPage.vue'
 import ReviewsPage from '../views/ReviewsPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import EditProfile from '@/views/EditProfile.vue'
@@ -8,6 +8,7 @@ import DevelopersPage from '@/views/DevelopersPage.vue'
 import SignUp from '@/views/SignUp.vue'
 import SignIn from '@/views/SignIn.vue'
 import LandingPage from '@/views/LandingPage.vue'
+import GameView from '@/views/GameView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,8 +28,8 @@ const router = createRouter({
     },
     {
       path: '/games',
-      name: 'GamePage',
-      component: GamePage
+      name: 'GamesPage',
+      component: GamesPage
     },
     {
       path: '/reviews',
@@ -59,6 +60,11 @@ const router = createRouter({
       path: '/landing',
       name: 'LandingPage',
       component: LandingPage
+    },
+    {
+      path: '/game/:id',
+      name: 'GameView',
+      component: GameView
     }
   ],
 })
