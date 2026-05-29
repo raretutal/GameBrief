@@ -73,10 +73,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
 import WriteRewview from '@/components/PageComponents/WriteReview.vue'
+import { getGameById } from '@/services/gameService'
 
+// Initialize the router to read the URL parameters
+const route = useRoute();
 
 // for WriteReview pop-up
 const showReviewModal = ref(false)
@@ -86,18 +90,39 @@ const handleReviewSubmit = (reviewData: { rating: number; text: string }) => {
   // Add logic here later to send data to Supabase
 };
 
-
-
-// State holding the specific game's data
-// This will eventually be populated via a Supabase fetch call
+// Default loading state
 const gameData = ref({
-  title: 'Hollow Knight',
-  releaseYear: '2017',
-  developer: 'Team Cherry',
-  backdropUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop', 
-  posterUrl: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=600&auto=format&fit=crop', 
-  synopsis: 'Forge your own path in Hollow Knight! An epic action adventure through a vast ruined kingdom of insects and heroes. Explore twisting caverns, battle tainted creatures and befriend bizarre bugs, all in a classic, hand-drawn 2D style.'
+  title: 'Loading...',
+  releaseYear: '',
+  developer: 'Loading...',
+  backdropUrl: 'https://via.placeholder.com/2000x800', 
+  posterUrl: 'https://via.placeholder.com/600x900', 
+  synopsis: 'Loading details...'
 });
 
+// Fetch data when the component mounts
+onMounted(async () => {
+  // Extract the game ID from the URL (e.g., /game/3 -> 3)
+  const gameId = Number(route.params.id);
+  
+  if (!gameId) return;
 
+  const { data, error } = await getGameById(gameId);
+  
+  if (data) {
+    // Map the database response to the UI state
+    gameData.value = {
+      title: data.title,
+      // The schema doesn't have a release_year yet, so we can use age_rating as a UI placeholder for now
+      releaseYear: data.age_rating || 'NR', 
+      developer: data.developerName,
+      // Since your schema only has one thumbnail_url, we use it for both images
+      backdropUrl: data.thumbnail_url || 'https://via.placeholder.com/2000x800',
+      posterUrl: data.thumbnail_url || 'https://via.placeholder.com/600x900',
+      synopsis: data.description || 'No description available.'
+    };
+  } else {
+    console.error('Failed to load game:', error);
+  }
+});
 </script>
