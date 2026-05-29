@@ -25,8 +25,8 @@ import CS2 from '../assets/sample/CS2.jpg'
     <!-- TRENDING -->
     <section class="content-section">
 
-      <h2 class="section-title">
-      TRENDING NOW
+      <h2 class="section-title trending-title">
+        <span class="trending-label">TRENDING</span> <span class="now-label">NOW</span>
       </h2>
 
       <div class="trending-container">
@@ -62,9 +62,15 @@ import CS2 from '../assets/sample/CS2.jpg'
     <!-- REVIEWS -->
     <section class="review-section">
 
-      <p class="review-subtitle">
-        CHECK OUT WHAT OTHER PEOPLE ARE SAYING...
-      </p>
+      <div class="community-reviews-header">
+        <svg class="community-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <h3 class="community-title">Community Reviews</h3>
+      </div>
 
       <div class="reviews-panel">
 
@@ -111,8 +117,7 @@ import CS2 from '../assets/sample/CS2.jpg'
   display: flex;
   flex-direction: column;
 
-  background:
-    radial-gradient(circle at top, #3b3b3b 0%, #111 45%, #000 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #121212 50%, #0d0d0d 100%);
 
   color: white;
 
@@ -147,6 +152,11 @@ import CS2 from '../assets/sample/CS2.jpg'
   text-align: center;
 
   margin: 0;
+
+  background: linear-gradient(135deg, #00ffff 0%, #00bfff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 
@@ -156,22 +166,44 @@ import CS2 from '../assets/sample/CS2.jpg'
   max-width: 1100px;
 
   margin-top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  align-items: flex-start;
+  padding-left: 32px;
 }
 
 .section-title {
   font-family: silkscreen;
-  font-size: 24px;
-
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 2px;
   margin-bottom: 28px;
+}
+
+.trending-title {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.trending-label {
+  color: #ff00ff;
+  text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+}
+
+.now-label {
+  color: white;
 }
 
 
 
 .trending-container {
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 32px;
-  flex-wrap: wrap;
+  width: 100%;
 }
 
 
@@ -187,29 +219,44 @@ import CS2 from '../assets/sample/CS2.jpg'
   margin-bottom: 120px;
 }
 
-.review-subtitle {
-  font-family: silkscreen;
-  font-size: 14px;
-
-  letter-spacing: 3px;
-
+.community-reviews-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 28px;
 }
 
+.community-icon {
+  color: #00ffff;
+  stroke-width: 2.5;
+}
+
+.community-title {
+  font-family: silkscreen;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin: 0;
+  color: white;
+}
+
+.community-title::first-letter {
+  color: #00ffff;
+}
+
 .reviews-panel {
-  width: 850px;
+  width: 900px;
+  max-width: 90%;
 
-  border-radius: 14px;
+  border-radius: 16px;
 
-  padding: 30px;
+  padding: 32px;
 
-  background: linear-gradient(
-    135deg,
-    rgba(16, 126, 145, 0.95),
-    rgba(52, 201, 232, 0.95)
-  );
+  background: rgba(5, 15, 40, 0.6);
+  
+  border: 2px solid rgba(0, 255, 255, 0.4);
 
-  box-shadow: 0 0 30px rgba(0,0,0,0.35);
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
 }
 
 
