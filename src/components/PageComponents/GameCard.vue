@@ -1,13 +1,21 @@
 <template>
   <div class="bg-zinc-800 rounded-lg overflow-hidden shadow-lg hover:shadow-[#35CCE0]/20 transition border border-zinc-700/50 group cursor-pointer flex flex-col h-full">
     
-    <div class="h-48 bg-zinc-700 relative overflow-hidden">
+    <div class="h-48 relative overflow-hidden bg-zinc-900">
+      <img
+        v-if="thumbnail_url"
+        :src="thumbnail_url"
+        class="absolute inset-0 w-full h-full object-cover blur-md opacity-40 scale-125"
+        aria-hidden="true"
+      />
+      
       <img
         :src="thumbnail_url || 'https://via.placeholder.com/400x250'"
         :alt="title"
-        class="w-full h-full object-contain group-hover:scale-105 transition duration-300"
+        class="relative z-10 w-full h-full object-contain group-hover:scale-105 transition duration-300"
       />
-      <div v-if="actual_price !== null" class="absolute top-2 right-2 bg-zinc-900/90 text-[#35CCE0] px-2 py-1 rounded text-sm font-bold backdrop-blur-sm">
+      
+      <div v-if="actual_price !== null" class="absolute top-2 right-2 z-20 bg-zinc-900/90 text-[#35CCE0] px-2 py-1 rounded text-sm font-bold backdrop-blur-sm">
         {{ actual_price === 0 ? 'Free' : '$' + actual_price }}
       </div>
     </div>
