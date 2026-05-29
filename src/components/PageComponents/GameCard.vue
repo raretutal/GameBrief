@@ -5,7 +5,7 @@
       <img
         :src="thumbnail_url || 'https://via.placeholder.com/400x250'"
         :alt="title"
-        class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+        class="w-full h-full object-contain group-hover:scale-105 transition duration-300"
       />
       <div v-if="actual_price !== null" class="absolute top-2 right-2 bg-zinc-900/90 text-[#35CCE0] px-2 py-1 rounded text-sm font-bold backdrop-blur-sm">
         {{ actual_price === 0 ? 'Free' : '$' + actual_price }}
