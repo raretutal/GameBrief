@@ -62,7 +62,7 @@ const router = createRouter({
       component: LandingPage
     },
     {
-      path: '/gameview',
+      path: '/game/:id',
       name: 'GameView',
       component: GameView
     }
