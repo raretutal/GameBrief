@@ -3,6 +3,7 @@ import HomePage from '../views/HomePage.vue'
 import GamePage from '../views/GamePage.vue'
 import ReviewsPage from '../views/ReviewsPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
+import EditProfile from '@/views/EditProfile.vue'
 import DevelopersPage from '@/views/DevelopersPage.vue'
 import LandingPage from '@/views/LandingPage.vue'
 

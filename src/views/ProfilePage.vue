@@ -6,52 +6,66 @@
         <!-- Profile Header Section -->
         <div class="flex flex-col lg:flex-row gap-6">
           
-          <!-- Main Profile Card -->
-          <div class="flex-1">
-            <div class="bg-gradient-to-r from-[#35CCE0] to-[#1D8A9A] rounded-2xl p-8 flex flex-col sm:flex-row items-center sm:items-start gap-6">
-              <!-- Avatar -->
-              <div class="w-32 h-32 rounded-full border-2 border-white/30 flex-shrink-0 overflow-hidden">
-                <img
-                  :src="profileData.avatarUrl"
-                  alt="Profile Avatar"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              
-              <!-- Info -->
-              <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
-                <h1 class="text-3xl md:text-4xl font-black text-white mb-2 font-behoveful">&lt;{{ profileData.username }}&gt;</h1>
-                <p class="text-white/80 mb-6 max-w-md">Bio &gt;_&lt; {{ profileData.bio }}</p>
-                
-                <!-- Buttons -->
-                <div class="flex gap-3">
-                  <button class="bg-zinc-900/80 hover:bg-zinc-900 text-white font-semibold py-2 px-5 rounded-full transition flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                    Edit Profile
-                  </button>
-                  <button class="bg-zinc-900/80 hover:bg-zinc-900 text-white font-semibold py-2 px-5 rounded-full transition flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Settings
-                  </button>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Followers/Following Cards -->
-            <div class="grid grid-cols-2 gap-4 mt-4">
-                <div class="bg-gradient-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-6 text-center">                <div class="text-4xl font-black text-white mb-1 font-behoveful">{{ profileData.followers }}</div>
-                <div class="text-white/80 font-medium">Followers</div>
-              </div>
-              <div class="bg-gradient-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-6 text-center">                <div class="text-4xl font-black text-white mb-1 font-behoveful">{{ profileData.following }}</div>
-                <div class="text-white/80 font-medium">Following</div>
-              </div>
-            </div>
-          </div>
+<!-- Main Profile Card -->
+<div class="flex-1">
+  <div class="bg-gradient-to-r from-[#35CCE0] to-[#1D8A9A] rounded-2xl p-8 flex flex-col sm:flex-row items-center sm:items-start gap-6">
+    
+    <!-- Avatar -->
+    <div class="w-32 h-32 rounded-full border-2 border-white/30 flex-shrink-0 overflow-hidden">
+      <img
+        :src="profileData.avatarUrl"
+        alt="Profile Avatar"
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <!-- Info -->
+    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+      <h1 class="text-3xl md:text-4xl font-black text-white mb-2 font-behoveful">
+        &lt;{{ profileData.username }}&gt;
+      </h1>
+
+      <p class="text-white/80 mb-6 max-w-md">
+        Bio &gt;_&lt; {{ profileData.bio }}
+      </p>
+
+      <!-- Buttons -->
+      <div class="flex gap-3">
+        <router-link
+          to="/edit"
+          class="bg-zinc-900/80 hover:bg-zinc-900 text-white font-semibold py-2 px-5 rounded-full transition flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+            />
+          </svg>
+          Edit Profile
+        </router-link>
+      </div>
+    </div>
+  </div>
+
+  <!-- Followers/Following Cards -->
+  <div class="grid grid-cols-2 gap-4 mt-4">
+    <div class="bg-gradient-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-6 text-center">
+      <div class="text-4xl font-black text-white mb-1 font-behoveful">
+        {{ profileData.followers }}
+      </div>
+      <div class="text-white/80 font-medium">Followers</div>
+    </div>
+
+    <div class="bg-gradient-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-6 text-center">
+      <div class="text-4xl font-black text-white mb-1 font-behoveful">
+        {{ profileData.following }}
+      </div>
+      <div class="text-white/80 font-medium">Following</div>
+    </div>
+  </div>
+</div>
           
           <!-- Stats Cards (Right Side) -->
           <div class="flex flex-col gap-4 lg:w-48">
