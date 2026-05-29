@@ -59,6 +59,11 @@ const router = createRouter({
       path: '/landing',
       name: 'LandingPage',
       component: LandingPage
+    },
+    {
+      path: '/edit',
+      name: 'EditProfile',
+      component: EditProfile
     }
   ],
 })
