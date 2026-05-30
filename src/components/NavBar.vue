@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-black/40 backdrop-blur-lg text-zinc-100 border-b border-white/5 shadow-2xl sticky top-0 z-50 transition-all duration-300">
+  <nav class="fixed w-full bg-black/40 backdrop-blur-lg text-zinc-100 border-b border-white/5 shadow-2xl top-0 z-50 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         
