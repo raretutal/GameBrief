@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-zinc-900 text-zinc-100 font-sans">
-    <NavBar />
 
       <div class="relative w-full h-80 md:h-[450px] overflow-hidden bg-zinc-950"> 
         

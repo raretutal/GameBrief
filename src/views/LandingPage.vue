@@ -9,8 +9,6 @@
       class="pointer-events-none fixed inset-0 z-0"
     />
 
-    <NavBar />
-
     <!-- Hero Section -->
     <main class="relative z-10 flex flex-col items-center justify-center text-center px-4 pt-12 pb-8">
       <!-- Logo -->

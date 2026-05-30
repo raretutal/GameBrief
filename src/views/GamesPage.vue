@@ -1,7 +1,6 @@
 <!-- Page for displaying all the games-->
 <template>
   <div class="min-h-screen bg-zinc-950 text-zinc-100 font-sans">
-    <NavBar />
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="flex items-center justify-between mb-8 border-b border-zinc-800 pb-4">

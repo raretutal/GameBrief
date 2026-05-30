@@ -40,7 +40,7 @@ const goToGame = (id: number) => {
 
 <template>
   <main>
-    <NavBar />
+
     <div class="homepage">
     <section class="hero-section">
       <h1 class="hero-title">
