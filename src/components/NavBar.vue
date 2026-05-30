@@ -70,6 +70,6 @@ watch(() => route.path, () => {
 const handleSignOut = () => {
   localStorage.removeItem('currentUser')
   currentUser.value = null
-  router.push('/signin')
+  router.push('/landing')
 }
 </script>
