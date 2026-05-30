@@ -115,6 +115,7 @@ const goToGame = (id: number) => {
   background: linear-gradient(135deg, #1a1a1a 0%, #121212 50%, #0d0d0d 100%);
   color: white;
   overflow-x: hidden;
+  padding-top: 80px;
 }
 
 .hero-section,

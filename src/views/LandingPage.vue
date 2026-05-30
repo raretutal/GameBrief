@@ -10,7 +10,7 @@
     />
 
     <!-- Hero Section -->
-    <main class="relative z-10 flex flex-col items-center justify-center text-center px-4 pt-12 pb-8">
+    <main class="relative z-10 flex flex-col items-center justify-center text-center px-4 pt-24 pb-12">
       <!-- Logo -->
       <img
         :src="GameBriefLogo"

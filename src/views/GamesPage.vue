@@ -2,7 +2,7 @@
 <template>
   <div class="min-h-screen bg-zinc-950 text-zinc-100 font-sans">
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
       <div class="flex items-center justify-between mb-8 border-b border-zinc-800 pb-4">
         <h1 class="text-3xl md:text-4xl font-silkscreen font-black text-white uppercase tracking-tighter">
           All Games <span class="text-[#35CCE0]">...</span>
