@@ -3,11 +3,18 @@
       <NavBar />
   
       <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <!-- Edit Picture Card -->
+        
+        <div 
+          v-if="message" 
+          :class="isError ? 'bg-red-500/20 text-red-400 border-red-500/50' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50'"
+          class="p-4 rounded-lg mb-6 text-center font-bold border"
+        >
+          {{ message }}
+        </div>
+
         <div class="bg-gradient-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-8 mb-6">
-          <div class="flex flex-col items-center">
-            <!-- Picture Preview -->
-            <div class="w-32 h-32 bg-zinc-300 rounded-lg mb-6 overflow-hidden">
+          <div class="flex flex-col items-center gap-4">
+            <div class="w-32 h-32 bg-zinc-800 rounded-lg overflow-hidden border-2 border-white/20">
               <img
                 v-if="profilePicture"
                 :src="profilePicture"
@@ -16,20 +23,25 @@
               />
             </div>
             
-            <!-- Edit Picture Button -->
+            <input
+              v-model="profilePicture"
+              type="text"
+              placeholder="Paste Image URL here"
+              class="w-full max-w-md bg-zinc-200 text-zinc-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#35CCE0]"
+            />
+            
             <button
               @click="editPicture"
-              class="bg-gradient-to-r from-[#35CCE0] to-[#1D8A9A] hover:opacity-90 text-white font-semibold py-2 px-8 rounded-full transition"
+              :disabled="isSaving"
+              class="bg-gradient-to-r from-[#35CCE0] to-[#1D8A9A] hover:opacity-90 text-white font-semibold py-2 px-8 rounded-full transition disabled:opacity-50"
             >
-              Edit Picture
+              Save Picture
             </button>
           </div>
         </div>
   
-        <!-- Edit Username & Bio Card -->
         <div class="bg-gradient-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-8">
           <div class="flex flex-col items-center gap-4">
-            <!-- Username Input -->
             <input
               v-model="username"
               type="text"
@@ -37,15 +49,14 @@
               class="w-full max-w-md bg-zinc-200 text-zinc-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#35CCE0]"
             />
             
-            <!-- Edit Username Button -->
             <button
               @click="editUsername"
-              class="bg-gradient-to-r from-[#35CCE0] to-[#1D8A9A] hover:opacity-90 text-white font-semibold py-2 px-8 rounded-full transition"
+              :disabled="isSaving"
+              class="bg-gradient-to-r from-[#35CCE0] to-[#1D8A9A] hover:opacity-90 text-white font-semibold py-2 px-8 rounded-full transition disabled:opacity-50"
             >
-              Edit Username
+              Save Username
             </button>
   
-            <!-- Bio Textarea -->
             <textarea
               v-model="bio"
               placeholder="Write your bio here..."
@@ -53,39 +64,97 @@
               class="w-full max-w-md bg-zinc-200 text-zinc-900 rounded-lg px-4 py-3 mt-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#35CCE0]"
             ></textarea>
             
-            <!-- Edit Bio Button -->
             <button
               @click="editBio"
-              class="bg-gradient-to-r from-[#35CCE0] to-[#1D8A9A] hover:opacity-90 text-white font-semibold py-2 px-8 rounded-full transition"
+              :disabled="isSaving"
+              class="bg-gradient-to-r from-[#35CCE0] to-[#1D8A9A] hover:opacity-90 text-white font-semibold py-2 px-8 rounded-full transition disabled:opacity-50"
             >
-              Edit Bio
+              Save Bio
             </button>
           </div>
         </div>
       </main>
     </div>
-  </template>
+</template>
   
-  <script setup lang="ts">
-  import { ref } from 'vue'
-  import NavBar from '@/components/NavBar.vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import NavBar from '@/components/NavBar.vue'
+import { getUserProfile, updateUserProfile } from '@/services/profileService'
+
+const router = useRouter()
+
+// Reactive state for the form inputs
+const profilePicture = ref('')
+const username = ref('')
+const bio = ref('')
+
+// State for GUI feedback
+const message = ref('')
+const isError = ref(false)
+const isSaving = ref(false)
+
+let currentUserId: number | null = null
+
+// Fetch the existing data when the page loads
+onMounted(async () => {
+  const storedUser = localStorage.getItem('currentUser')
   
-  const profilePicture = ref('')
-  const username = ref('')
-  const bio = ref('')
+  if (!storedUser) {
+    router.push('/signin')
+    return
+  }
+
+  const user = JSON.parse(storedUser)
+  currentUserId = user.user_id
+
+  const { data } = await getUserProfile(currentUserId!)
   
-  const editPicture = () => {
-    // Will connect to backend later - file upload logic
-    console.log('Edit picture clicked')
+  if (data) {
+    username.value = data.username
+    // Prevent placeholder text from appearing as actual input values
+    bio.value = data.bio === 'No bio provided.' ? '' : data.bio
+    profilePicture.value = data.avatarUrl === 'https://via.placeholder.com/150' ? '' : data.avatarUrl
+  }
+})
+
+// Unified save function that pushes all current input values to the database
+const saveChanges = async (fieldName: string) => {
+  if (!currentUserId) return
+  
+  isSaving.value = true
+  message.value = `Saving ${fieldName}...`
+  isError.value = false
+
+  const { error } = await updateUserProfile(
+    currentUserId, 
+    username.value, 
+    bio.value, 
+    profilePicture.value
+  )
+
+  if (error) {
+    message.value = `Failed to update ${fieldName}.`
+    isError.value = true
+  } else {
+    message.value = `${fieldName} updated successfully!`
+    isError.value = false
+    
+    // Update local storage so the NavBar instantly reflects the new username/avatar
+    const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
+    storedUser.username = username.value
+    if (profilePicture.value) {
+      storedUser.image_url = profilePicture.value
+    }
+    localStorage.setItem('currentUser', JSON.stringify(storedUser))
   }
   
-  const editUsername = () => {
-    // Will connect to backend later
-    console.log('Updating username:', username.value)
-  }
-  
-  const editBio = () => {
-    // Will connect to backend later
-    console.log('Updating bio:', bio.value)
-  }
-  </script>
+  isSaving.value = false
+}
+
+// Bind the buttons to the save function with appropriate labels
+const editPicture = () => saveChanges('Profile Picture')
+const editUsername = () => saveChanges('Username')
+const editBio = () => saveChanges('Bio')
+</script>

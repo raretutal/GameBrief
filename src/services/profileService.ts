@@ -73,3 +73,21 @@ export const getUserProfile = async (userId: number): Promise<{ data: UserProfil
     return { data: null, error: err.message || 'Failed to fetch profile data.' }
   }
 }
+
+// to allow userrs to update their profile
+export const updateUserProfile = async (userId: number, username: string, bio: string, imageUrl: string): Promise<{ error: string | null }> => {
+  try {
+    const { error } = await supabase
+      .from('User')
+      .update({
+        username: username,
+        profile_bio: bio,
+        image_url: imageUrl
+      })
+      .eq('user_id', userId);
+
+    return { error: error ? error.message : null };
+  } catch (err: any) {
+    return { error: err.message || 'An unexpected error occurred.' };
+  }
+}
