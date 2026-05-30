@@ -4,4 +4,5 @@ export interface User {
   email: string;
   password_hash: string;
   profile_bio?: string | null;
+  image_url?: string | null;
 }
