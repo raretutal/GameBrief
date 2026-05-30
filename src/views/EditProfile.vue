@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-zinc-900 text-zinc-100 font-sans">
       <NavBar />
   
-      <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         
         <div 
           v-if="message" 
