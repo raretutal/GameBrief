@@ -22,7 +22,7 @@
       </h1>
 
       <p class="text-white/80 mb-6 max-w-md">
-        Bio := {{ profileData.bio }}
+        Bio:   {{ profileData.bio }}
       </p>
 
       <div class="flex gap-3">
