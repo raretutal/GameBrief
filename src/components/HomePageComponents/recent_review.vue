@@ -1,7 +1,7 @@
 <template>
   <div class="review-item">
     <div class="review-avatar">
-      <img :src="pfp" :alt="username" />
+      <img :src="pfp || 'https://via.placeholder.com/150'" :alt="username" />
     </div>
     
     <div class="review-content">
@@ -24,7 +24,7 @@
         </div>
       </div>
       
-      <p class="review-text">{{ review }}</p>
+      <p class="review-text">{{ review || 'No comment provided.' }}</p>
       
       <p class="review-date">{{ date }}</p>
     </div>
@@ -33,11 +33,11 @@
 
 <script setup lang="ts">
 interface Props {
-  pfp: string
+  pfp: string | null
   username: string
   date: string
   rating: number
-  review: string
+  review: string | null
 }
 
 defineProps<Props>()

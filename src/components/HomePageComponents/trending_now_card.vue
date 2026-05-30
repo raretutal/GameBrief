@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-image">
-      <img :src="image" :alt="game_name" />
+      <img :src="image || 'https://via.placeholder.com/400x250'" :alt="game_name" />
       <div class="rating-badge">
         <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <polygon points="12 2 15.09 10.26 23.77 10.35 17.16 16.61 19.91 25.88 12 20.09 4.09 25.88 6.84 16.61 0.22 10.35 8.91 10.26 12 2"></polygon>
@@ -16,7 +16,7 @@
       
       <div class="card-footer">
         <span class="review-count">{{ review_count }} reviews</span>
-        <a href="#" class="view-link">View →</a>
+        <a class="view-link">View →</a>
       </div>
     </div>
   </div>
@@ -24,10 +24,10 @@
 
 <script setup lang="ts">
 interface Props {
-  image: string
+  image: string | null
   game_name: string
   game_platform: string
-  average_rating: number
+  average_rating: number | string
   review_count: number
 }
 
