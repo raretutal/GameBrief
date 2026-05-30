@@ -74,6 +74,7 @@
               <ReviewCard
                 v-for="review in reviews"
                 :key="review.user_id + '_' + review.created_at"
+                :user_id="review.user_id" 
                 :username="review.username"
                 :user_image="review.user_image"
                 :star_rating="review.star_rating"

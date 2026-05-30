@@ -1,5 +1,11 @@
 <template>
-  <div class="review-item">
+  <div 
+    class="review-item" 
+    @click="goToProfile(user_id)" 
+    style="cursor: pointer; transition: border-color 0.2s;"
+    onmouseover="this.style.borderColor='rgba(53, 204, 224, 0.5)'"
+    onmouseout="this.style.borderColor='rgba(255, 255, 255, 0.1)'"
+  >
     <div class="review-avatar">
       <img :src="pfp || 'https://via.placeholder.com/150'" :alt="username" />
     </div>
@@ -25,14 +31,18 @@
       </div>
       
       <p class="review-text">{{ review || 'No comment provided.' }}</p>
-      
       <p class="review-date">{{ date }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 interface Props {
+  user_id?: number // Added
   pfp: string | null
   username: string
   date: string
@@ -40,7 +50,11 @@ interface Props {
   review: string | null
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const goToProfile = (id?: number) => {
+  if (id) router.push(`/user/${id}`)
+}
 </script>
 
 <style scoped>
