@@ -92,6 +92,7 @@ const goToGame = (id: number) => {
           <ReviewBox
             v-for="review in recentReviews"
             :key="review.user_id + '_' + review.created_at"
+            :user_id="review.user_id"
             :pfp="review.user_image"
             :username="review.username"
             :date="new Date(review.created_at).toLocaleDateString()"
