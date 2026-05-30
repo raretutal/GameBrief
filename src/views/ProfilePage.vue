@@ -209,7 +209,7 @@ const selectGame = (gameIndex: number) => {
 
 const logout = () => {
   localStorage.removeItem('currentUser')
-  router.push('/signin')
+  router.push('/landing')
 }
 
 // Data fetching helper to keep data in sync
