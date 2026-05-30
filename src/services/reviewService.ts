@@ -120,3 +120,39 @@ export const addReview = async (userId: number, gameId: number, starRating: numb
     return { error: err.message };
   }
 }
+
+
+// gets recent community reviews acrooss the entire platform for the Community Reviews section
+export const getRecentCommunityReviews = async (limit: number = 3): Promise<{ data: Review[] | null; error: string | null }> => {
+  try {
+    const { data, error } = await supabase
+      .from('review')
+      .select(`
+        *,
+        User (
+          username,
+          image_url
+        )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      return { data: null, error: error.message };
+    }
+
+    const formattedData: Review[] = data.map((item: any) => ({
+      user_id: item.user_id,
+      game_id: item.game_id,
+      created_at: item.created_at,
+      star_rating: item.star_rating,
+      comment_text: item.comment_text,
+      username: item.User?.username || 'Unknown User',
+      user_image: item.User?.image_url || null
+    }));
+
+    return { data: formattedData, error: null };
+  } catch (err: any) {
+    return { data: null, error: err.message || 'An unexpected error occurred.' };
+  }
+}
