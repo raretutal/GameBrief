@@ -1,5 +1,11 @@
 <template>
-  <div class="bg-linear-to-br from-[#EC2D8F] via-[#D91A7A] to-[#B91C6A] rounded-2xl p-5 flex items-center gap-5 shadow-lg w-full">
+  <div
+    class="border-2 rounded-2xl p-5 flex items-center gap-5 w-full transition-all duration-300 cursor-pointer"
+    :class="isHovered ? 'border-[#EC2D8F]' : 'border-[#EC2D8F]'"
+    :style="cardStyle"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
+  >
     
     <img 
       :src="img_url || 'https://via.placeholder.com/150'" 
@@ -24,9 +30,25 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
+
 defineProps<{
   company_name: string
   img_url: string | null
   website_url: string | null
 }>()
+
+const isHovered = ref(false)
+
+const cardStyle = computed(() => {
+  const glowStrength = isHovered.value ? '0.8' : '0.5'
+  const insetStrength = isHovered.value ? '0.4' : '0.2'
+  const glowSize = isHovered.value ? '40px' : '20px'
+  const bgOpacity = isHovered.value ? '0.35' : '0.25'
+
+  return {
+    background: `radial-gradient(circle at 50% 0%, rgba(236, 45, 143, ${bgOpacity}) 0%, rgba(15, 23, 42, 0.95) 80%)`,
+    boxShadow: `0 0 ${glowSize} rgba(236, 45, 143, ${glowStrength}), inset 0 0 ${glowSize} rgba(236, 45, 143, ${insetStrength})`,
+  }
+})
 </script>
